@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: mini-erp-service APIs
+  description: mini-erp service application api
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+security:
+  - bearerAuth: [ ]
+tags:
+  - name: users
+    description: API for users authentaication
+  - name: user-management
+    description: API for authentication
+servers:
+  - url: http://localhost:{port}/api
+    description: Production server (uses live data)
+  - url: http://localhost:{port}/api
+    description: Dev server (uses test data)
+  - url: http://localhost:{port}/api
+    description: local server
+    variables:
+      port:
+        default: '3000'
+paths:
+  /auth/login:
+    post:
+      tags:
+        - user-management
+      description: login a user in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDTO'
+      summary: Login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDTO'
+        '422':
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginRejectedDTO'
+components:
+  examples:
+  schemas:
+    LoginDTO:
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: '01223012355'
+        password:
+          type: string
+          example: '123456789'
+    LoginResponseDTO:
+      type: object
+      properties:
+        msg:
+          type: string
+        user:
+          type: object
+          properties:
+            password:
+              type: string
+            username:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            __v:
+              type: string
+        data:
+          type: string
+    LoginRejectedDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          enum:
+            - 1
+            - 100
+          description: |-
+            Reject reasons:
+             * `1` - Invalid username or password.
+             * `100` - general error.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

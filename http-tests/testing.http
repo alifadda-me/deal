@@ -1,0 +1,68 @@
+###
+GET {{host}}/healthcheck
+
+###
+POST {{host}}/api/users/login
+Content-Type: application/json
+
+{
+  "phone": "1122334455",
+  "password": "123456789"
+}
+> {%
+    client.global.set("accessToken", response.body.accessToken)
+%}
+
+###
+POST {{host}}/api/property-requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMiIsInBob25lIjoiMDk4NzY1NDMyMSIsInJvbGUiOiJBR0VOVCJ9LCJpYXQiOjE3MTYzODE5MDcsImV4cCI6MTcxNjQ2ODMwN30.mI9TBtJM1MsiCZP1ilkGkl9rHlcvicxI2WwGwLcZS50
+Content-Type: application/json
+
+{
+  "propertyType": "APARTMENT",
+  "area": 130,
+  "price": 165000,
+  "city": "Cairo",
+  "district": "Maadi",
+  "description": "Request for APARTMENT"
+}
+
+###
+PATCH {{host}}/api/property-requests/664de7e8aa7a22646984a7b5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTYzOTU5NDgsImV4cCI6MTcxNjQ4MjM0OH0.UPmeUlxfyJjVlC2zi-X9FMBu0IcIqcodIZ-PwMoftko
+Content-Type: application/json
+
+{
+  "propertyType": "VILLA",
+  "area": 140
+}
+
+###
+POST {{host}}/api/ads
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMiIsInBob25lIjoiMDk4NzY1NDMyMSIsInJvbGUiOiJBR0VOVCJ9LCJpYXQiOjE3MTYzODI0NzQsImV4cCI6MTcxNjQ2ODg3NH0.RKCNpcgFPpB_dw0l_REQFvzZbGcbRHs-JWCjosyWnuE
+Content-Type: application/json
+
+{
+  "propertyType": "APARTMENT",
+  "area": 130,
+  "price": 165000,
+  "city": "Cairo",
+  "district": "Maadi",
+  "description": "Ad for APARTMENT"
+}
+
+###
+GET {{host}}/api/property-requests/ads/6287558411b84b2ea03bc448?page=1&limit=10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTYzNzI4OTQsImV4cCI6MTcxNjQ1OTI5NH0.Tp1dsMTSmF2BvEfuN6zT-LsFfyXSFmivbhrakKPjBp0
+
+###
+GET {{host}}/api/property-requests/stats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTYzNzI4OTQsImV4cCI6MTcxNjQ1OTI5NH0.Tp1dsMTSmF2BvEfuN6zT-LsFfyXSFmivbhrakKPjBp0
+
+###
+GET {{host}}/api/property-requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMSIsInBob25lIjoiMTIzNDU2Nzg5MCIsInJvbGUiOiJDTElFTlQifSwiaWF0IjoxNzE2Mzc2MTA5LCJleHAiOjE3MTY0NjI1MDl9.SWnyIbB6D3h3wPcUcB1QRDg27AJPpc-uyLhOdHNhCxM
+
+###
+GET {{host}}/api/ads
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMiIsInBob25lIjoiMDk4NzY1NDMyMSIsInJvbGUiOiJBR0VOVCJ9LCJpYXQiOjE3MTYzNzY4NDIsImV4cCI6MTcxNjQ2MzI0Mn0.K0EpoZMhyITSrWtkitnQ_PMMJOkn4EAqXEFlbjVtwFU

@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "name": "Alice Johnson",
+  "phone": "1234567890",
+  "role": "CLIENT",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc422"
+  },
+  "name": "Bob Smith",
+  "phone": "0987654321",
+  "role": "AGENT",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc423"
+  },
+  "name": "Chris Doe",
+  "phone": "1122334455",
+  "role": "ADMIN",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc424"
+  },
+  "name": "Diana Ross",
+  "phone": "1223334444",
+  "role": "CLIENT",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc425"
+  },
+  "name": "Evan Wright",
+  "phone": "1333444555",
+  "role": "AGENT",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc426"
+  },
+  "name": "Fiona Green",
+  "phone": "1444555666",
+  "role": "ADMIN",
+  "status": "ACTIVE",
+  "password": "$2a$10$AYLyQtPeb5srg2sqosiQROuOdTgFgyNdjSTSDIAgNDexOfqREbnru"
+}]

@@ -1,0 +1,184 @@
+[{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc431"
+  },
+  "propertyType": "APARTMENT",
+  "area": 120,
+  "price": 150000,
+  "city": "Cairo",
+  "district": "Maadi",
+  "description": "Looking for a well-ventilated apartment with natural light.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc432"
+  },
+  "propertyType": "VILLA",
+  "area": 300,
+  "price": 500000,
+  "city": "Cairo",
+  "district": "New Cairo",
+  "description": "Desire a spacious villa in a secure area.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc424"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc433"
+  },
+  "propertyType": "LAND",
+  "area": 600,
+  "price": 200000,
+  "city": "Alexandria",
+  "district": "Sidi Gaber",
+  "description": "Looking for a large plot of land for investment purposes.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc434"
+  },
+  "propertyType": "HOUSE",
+  "area": 200,
+  "price": 300000,
+  "city": "Giza",
+  "district": "6th of October",
+  "description": "Interested in a family house with a backyard.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc424"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc435"
+  },
+  "propertyType": "APARTMENT",
+  "area": 100,
+  "price": 120000,
+  "city": "Cairo",
+  "district": "Zamalek",
+  "description": "Seeking a cozy apartment in a quiet neighborhood.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc436"
+  },
+  "propertyType": "VILLA",
+  "area": 350,
+  "price": 550000,
+  "city": "Cairo",
+  "district": "Nasr City",
+  "description": "Looking for a modern villa with a swimming pool.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc424"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc437"
+  },
+  "propertyType": "HOUSE",
+  "area": 180,
+  "price": 250000,
+  "city": "Alexandria",
+  "district": "Mandara",
+  "description": "Need a house near the sea for weekend getaways.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6287558411b84b2ea03bc438"
+  },
+  "propertyType": "LAND",
+  "area": 500,
+  "price": 180000,
+  "city": "Giza",
+  "district": "Dokki",
+  "description": "Searching for land to develop a commercial property.",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc424"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T13:12:45.508Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "664de7e8aa7a22646984a7b5"
+  },
+  "userId": {
+    "$oid": "6287558411b84b2ea03bc421"
+  },
+  "propertyType": "VILLA",
+  "area": 140,
+  "price": 165000,
+  "city": "Cairo",
+  "district": "Maadi",
+  "description": "Request for APARTMENT",
+  "refreshedAt": {
+    "$date": "2024-05-22T13:12:45.507Z"
+  },
+  "createdAt": {
+    "$date": "2024-05-22T12:41:12.924Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-22T17:25:17.610Z"
+  },
+  "__v": 0
+}]
