@@ -1,13 +1,11 @@
 name: Deploy application
 
-# run workflow on every push
 on:
   push:
     branches: [ main ]
 
 jobs:
   deploy:
-    # run workflow on ubuntu with permissions
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -20,42 +18,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.3
 
-      # setup latest node version
       - uses: actions/setup-node@v1
         with:
           node-version: "20"
 
-
-      # We need to configure AWS creds using aws actions to deploy code on AWS EC2
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-
-      # AWS ECR action for login, will automatically
-      # login using AWS credentials to push docker image
-      - name: Login to Amazon ECR
-        # id for ECR. You can add anything as id
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          # registry url, will take it automatically from login output
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: deal
-          IMAGE_TAG: image-tag-name
+      - name: Debug Environment Variables
         run: |
-          # build image
-          echo "Pushing image to ECR..."
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .         
-          # push docker image
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "AWS_REGISTRY_URL: ${{ secrets.AWS_REGISTRY_URL }}"
+          echo "Generated Docker tag:  $TAG"
+
+      - name: Push Docker image to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
+          docker push "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
 
       - name: SSH into EC2 instance and deploy
         uses: appleboy/ssh-action@master
