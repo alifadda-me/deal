@@ -15,16 +15,16 @@ Content-Type: application/json
 
 ###
 POST {{host}}/api/property-requests
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMiIsInBob25lIjoiMDk4NzY1NDMyMSIsInJvbGUiOiJBR0VOVCJ9LCJpYXQiOjE3MTYzODE5MDcsImV4cCI6MTcxNjQ2ODMwN30.mI9TBtJM1MsiCZP1ilkGkl9rHlcvicxI2WwGwLcZS50
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTY0NzM5NTgsImV4cCI6MTcxNjU2MDM1OH0.jiCfQ00-tpuXI4xJ1SvPyqb_e93YnOCdvlGkDhqVD8g
 Content-Type: application/json
 
 {
-  "propertyType": "APARTMENT",
+  "propertyType": "VILLA",
   "area": 130,
-  "price": 165000,
+  "price": 160000,
   "city": "Cairo",
   "district": "Maadi",
-  "description": "Request for APARTMENT"
+  "description": "Request for VILLA"
 }
 
 ###
@@ -57,7 +57,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6I
 
 ###
 GET {{host}}/api/property-requests/stats
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTYzNzI4OTQsImV4cCI6MTcxNjQ1OTI5NH0.Tp1dsMTSmF2BvEfuN6zT-LsFfyXSFmivbhrakKPjBp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTY0NzM5NTgsImV4cCI6MTcxNjU2MDM1OH0.jiCfQ00-tpuXI4xJ1SvPyqb_e93YnOCdvlGkDhqVD8g
 
 ###
 GET {{host}}/api/property-requests
@@ -65,4 +65,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6I
 
 ###
 GET {{host}}/api/ads
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMiIsInBob25lIjoiMDk4NzY1NDMyMSIsInJvbGUiOiJBR0VOVCJ9LCJpYXQiOjE3MTYzNzY4NDIsImV4cCI6MTcxNjQ2MzI0Mn0.K0EpoZMhyITSrWtkitnQ_PMMJOkn4EAqXEFlbjVtwFU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTY0NjQ0NjEsImV4cCI6MTcxNjU1MDg2MX0.izuTC-goVcNh670JgLvjU_HYQKt--mPDVydi9VBjSrQ

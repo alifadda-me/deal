@@ -1,102 +1,221 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
-  title: mini-erp-service APIs
-  description: mini-erp service application api
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-security:
-  - bearerAuth: [ ]
-tags:
-  - name: users
-    description: API for users authentaication
-  - name: user-management
-    description: API for authentication
+  title: Deal API
+  description: API to manage property requests and administrative statistics.
+  version: "1.0"
 servers:
-  - url: http://localhost:{port}/api
-    description: Production server (uses live data)
-  - url: http://localhost:{port}/api
-    description: Dev server (uses test data)
+  - url: http://ec2-54-160-168-56.compute-1.amazonaws.com:8080/api
+    description: Production server
+  - url: http://ec2-54-160-168-56.compute-1.amazonaws.com:8080/api
+    description: Dev server
   - url: http://localhost:{port}/api
     description: local server
     variables:
       port:
         default: '8080'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - phone
+        - password
+      properties:
+        phone:
+          type: string
+          example: '1122334455'
+          description: User's unique phone number.
+        password:
+          type: string
+          format: password
+          example: '123456789'
+          description: User's password.
+
+    LoginResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyODc1NTg0MTFiODRiMmVhMDNiYzQyMyIsInBob25lIjoiMTEyMjMzNDQ1NSIsInJvbGUiOiJBRE1JTiJ9LCJpYXQiOjE3MTY0NzQ4NjksImV4cCI6MTcxNjU2MTI2OX0.ESJA2elOI0odsN6AT4cqKUB4XGF9XYqPpCxY8DN0csc'
+              description: JWT used for subsequent requests requiring authentication.
+            user:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: '6287558411b84b2ea03bc423'
+                name:
+                  type: string
+                  example: 'Chris Doe'
+                phone:
+                  type: string
+                  example: '1122334455'
+                role:
+                  type: string
+                  example: 'ADMIN'
+                status:
+                  type: string
+                  example: 'ACTIVE'
+                  description: Current status of the user.
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        errorCode:
+          type: string
+          example: 'invalid-user-name-or-password'
+        description:
+          type: string
+          example: 'Invalid username or password!'
+
+    PropertyRequest:
+      type: object
+      required:
+        - propertyType
+        - area
+        - price
+        - city
+        - district
+        - description
+      properties:
+        propertyType:
+          type: string
+          enum: [VILLA, HOUSE, LAND, APARTMENT]
+          example: 'APARTMENT'
+        area:
+          type: number
+          example: 120
+        price:
+          type: number
+          example: 500000
+        city:
+          type: string
+          example: 'Cairo'
+        district:
+          type: string
+          example: 'Maadi'
+        description:
+          type: string
+          example: 'Spacious two bedroom apartment.'
+
+    Statistic:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '6287558411b84b2ea03bc423'
+        name:
+          type: string
+          example: 'Chris Doe'
+        role:
+          type: string
+          example: 'ADMIN'
+        adsCount:
+          type: integer
+          example: 1
+        totalAdsAmount:
+          type: number
+          example: 500000
+        requestsCount:
+          type: integer
+          example: 5
+        totalRequestsAmount:
+          type: number
+          example: 750000
+
 paths:
-  /auth/login:
+  /property-requests:
     post:
       tags:
-        - user-management
-      description: login a user in the system
+        - Property Requests
+      summary: Create a property request
+      description: Allows a client to create a new property request.
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginDTO'
-      summary: Login
+              $ref: '#/components/schemas/PropertyRequest'
+      responses:
+        '201':
+          description: Property request created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    additionalProperties: false
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden for non-clients
+
+  /property-requests/stats:
+    get:
+      tags:
+        - Admin Stats
+      summary: Get statistical data on property requests and ads
+      description: Provides statistical data about users and their ads or property requests.
+      security:
+        - BearerAuth: []
       responses:
         '200':
-          description: OK
+          description: Successfully retrieved statistics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponseDTO'
-        '422':
-          description: UNPROCESSABLE_ENTITY
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Statistic'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access restricted to admin users only
+
+  /users/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticates a user and returns a JWT along with user details for accessing protected endpoints.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful, returns JWT and user details.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginRejectedDTO'
-components:
-  examples:
-  schemas:
-    LoginDTO:
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          example: '01223012355'
-        password:
-          type: string
-          example: '123456789'
-    LoginResponseDTO:
-      type: object
-      properties:
-        msg:
-          type: string
-        user:
-          type: object
-          properties:
-            password:
-              type: string
-            username:
-              type: string
-            createdAt:
-              type: string
-            updatedAt:
-              type: string
-            __v:
-              type: string
-        data:
-          type: string
-    LoginRejectedDTO:
-      type: object
-      properties:
-        code:
-          type: integer
-          enum:
-            - 1
-            - 100
-          description: |-
-            Reject reasons:
-             * `1` - Invalid username or password.
-             * `100` - general error.
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized, invalid username or password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
