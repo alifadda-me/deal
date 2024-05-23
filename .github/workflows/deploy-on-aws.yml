@@ -29,8 +29,8 @@ jobs:
 
       - name: Build and push Docker images using docker-compose
         run: |
-          docker-compose -f docker-compose.prod.yml build
-          docker-compose -f docker-compose.prod.yml push
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml push
 
       - name: SSH into EC2 instance and deploy using docker-compose
         uses: appleboy/ssh-action@master
@@ -49,7 +49,7 @@ jobs:
             git pull
             
             echo "Deploying using Docker Compose..."
-            docker-compose -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.yml up -d
 
 env:
   TAG: ${{ github.sha }}
