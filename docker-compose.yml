@@ -9,6 +9,8 @@ services:
       - ACCESS_TOKEN_EXPIRY=1d
     depends_on:
       - mongo
+    networks:
+      - app-network
 
   mongo:
     image: mongo:latest
@@ -18,6 +20,12 @@ services:
     volumes:
       - ./mongo-seed:/docker-entrypoint-initdb.d
       - mongo-data:/data/db
+    networks:
+      - app-network
 
 volumes:
   mongo-data:
+
+networks:
+  app-network:
+    driver: bridge
