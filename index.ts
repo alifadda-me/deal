@@ -74,7 +74,7 @@ const normalizePort = (val) => {
   return false;
 };
 
-const port = normalizePort(Env.PORT || '3000');
+const port = normalizePort(Env.PORT || '8080');
 app.set('port', port);
 
 const server = http.createServer(app);

@@ -22,7 +22,7 @@ servers:
     description: local server
     variables:
       port:
-        default: '3000'
+        default: '8080'
 paths:
   /auth/login:
     post:
