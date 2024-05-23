@@ -53,3 +53,15 @@ jobs:
           # push docker image
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ssh_private_key && chmod 600 ssh_private_key
+          
+          # Copy deploy.sh file in the application folder inside the EC2 instance
+          cat deploy.sh | ssh -i ssh_private_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'cat > ./deploy.sh'
+          
+          # Copy docker-compose to EC2, configure envrinment variabes and run deploy.sh
+          cat docker-compose.yaml | ssh -i ssh_private_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} sudo PUBLISH_PORT=${{ secrets.PUBLISH_PORT }} 'bash -c "cat > docker-compose.yaml && chmod +x ./deploy.sh && ./deploy.sh"'
