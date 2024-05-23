@@ -54,14 +54,41 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: Deploy
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          echo "$SSH_PRIVATE_KEY" > ssh_private_key && chmod 600 ssh_private_key
-          
-          # Copy deploy.sh file in the application folder inside the EC2 instance
-          cat deploy.sh | ssh -i ssh_private_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} 'cat > ./deploy.sh'
-          
-          # Copy docker-compose to EC2, configure envrinment variabes and run deploy.sh
-          cat docker-compose.yaml | ssh -i ssh_private_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_ADDRESS }} sudo PUBLISH_PORT=${{ secrets.PUBLISH_PORT }} 'bash -c "cat > docker-compose.yaml && chmod +x ./deploy.sh && ./deploy.sh"'
+      - name: SSH into EC2 instance and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_ADDRESS }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: |
+            TAG=${TAG}
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION=${{ secrets.AWS_REGION }}
+          script: |
+            echo "AWS CLI version: $(aws --version)"
+            echo "Docker version: $(docker --version)"
+            
+            echo "Stop the current running container if exist..."
+            docker stop deal_api || true
+            
+            echo "Remove the previous container..."
+            docker rm deal_api || true
+            
+            echo "AWS credentials set...."
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            export AWS_REGION=${AWS_REGION}
+            
+            echo "Logging in to ECR...."
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
+            echo "Logged in successful..."
+            
+            echo "Pulling  image from ECR..."
+            echo "Docker pull command: docker pull \"${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}\""
+            echo "Docker pull completed..."
+            
+            echo "Running the container..."
+            docker run -d \
+              --name deal_api \
+              -p ${{ secrets.EXPOSED_PORT }}:${{ secrets.APPLICATION_PORT }} "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"
