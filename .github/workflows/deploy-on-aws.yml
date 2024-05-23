@@ -29,6 +29,7 @@ jobs:
 
       - name: Build and push Docker images using docker-compose
         run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
 
@@ -39,17 +40,19 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "AWS CLI version: $(aws --version)"
-            echo "Docker version: $(docker --version)"
-            
-            echo "Logging in to ECR...."
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
-            
-            echo "Pulling latest configurations and docker-compose file..."
-            git pull
-            
+            echo "Configuring AWS CLI..."
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            export AWS_REGION=${AWS_REGION}
+
+            echo "Logging in to ECR..."
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
+
+            echo "Pulling the latest image..."
+            docker pull "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
+
             echo "Deploying using Docker Compose..."
-            docker-compose -f docker-compose.yml up -d
+            docker-compose -f docker-compose.prod.yml up -d
 
 env:
   TAG: ${{ github.sha }}
