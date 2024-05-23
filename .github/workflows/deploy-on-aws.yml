@@ -91,5 +91,5 @@ jobs:
             echo "Running the container..."
             docker run -d \
               --name deal_api \
-              --env-file  .env \
+              --env-file .env \
               -p ${{ secrets.EXPOSED_PORT }}:${{ secrets.APPLICATION_PORT }} "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"

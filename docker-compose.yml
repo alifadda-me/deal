@@ -12,12 +12,18 @@ services:
 
   mongo:
     image: mongo:latest
-    container_name: mongodb
+    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - ./mongo-seed:/docker-entrypoint-initdb.d
       - mongo-data:/data/db
+    networks:
+      - my-network
+
+  networks:
+    my-network:
+      driver: bridge
 
 volumes:
   mongo-data:
