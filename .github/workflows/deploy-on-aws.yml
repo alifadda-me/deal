@@ -52,7 +52,7 @@ jobs:
             docker pull "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
 
             echo "Deploying using Docker Compose..."
-            docker-compose -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.yml up -d
 
 env:
   TAG: ${{ github.sha }}
