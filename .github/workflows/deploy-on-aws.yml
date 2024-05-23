@@ -1,4 +1,4 @@
-name: Deploy application
+name: Deploy application with Docker Compose
 
 on:
   push:
@@ -11,14 +11,12 @@ jobs:
       id-token: write
       contents: read
 
-    env:
-      TAG: ${{ github.sha }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.3
 
-      - uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
           node-version: "20"
 
@@ -29,58 +27,29 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Debug Environment Variables
+      - name: Build and push Docker images using docker-compose
         run: |
-          echo "AWS_REGISTRY_URL: ${{ secrets.AWS_REGISTRY_URL }}"
-          echo "Generated Docker tag:  $TAG"
+          docker-compose -f docker-compose.prod.yml build
+          docker-compose -f docker-compose.prod.yml push
 
-      - name: Build Docker image and set Docker tag with TAG
-        run: |
-          echo "Generated Docker tag: $TAG"
-          docker build -t "${{ secrets.REPOSITORY_NAME }}" .
-          docker tag "${{ secrets.REPOSITORY_NAME }}" "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
-
-      - name: Push Docker image to Amazon ECR
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
-          docker push "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${TAG}"
-
-      - name: SSH into EC2 instance and deploy
+      - name: SSH into EC2 instance and deploy using docker-compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_ADDRESS }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: |
-            TAG=${TAG}
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_REGION=${{ secrets.AWS_REGION }}
           script: |
             echo "AWS CLI version: $(aws --version)"
             echo "Docker version: $(docker --version)"
             
-            echo "Stop the current running container if exist..."
-            docker stop deal_api || true
-            
-            echo "Remove the previous container..."
-            docker rm deal_api || true
-            
-            echo "AWS credentials set...."
-            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-            export AWS_REGION=${AWS_REGION}
-            
             echo "Logging in to ECR...."
-            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
-            echo "Logged in successful..."
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_REGISTRY_URL }}
             
-            echo "Pulling  image from ECR..."
-            echo "Docker pull command: docker pull \"${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}\""
-            echo "Docker pull completed..."
+            echo "Pulling latest configurations and docker-compose file..."
+            git pull
             
-            echo "Running the container..."
-            docker run -d \
-              --name deal_api \
-              --env-file .env \
-              -p ${{ secrets.EXPOSED_PORT }}:${{ secrets.APPLICATION_PORT }} "${{ secrets.AWS_REGISTRY_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ env.TAG }}"
+            echo "Deploying using Docker Compose..."
+            docker-compose -f docker-compose.prod.yml up -d
+
+env:
+  TAG: ${{ github.sha }}
